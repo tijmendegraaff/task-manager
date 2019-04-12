@@ -1,6 +1,8 @@
 const express = require("express");
 require("./db/mongoose");
+// import Models
 const User = require("./models/user");
+const Task = require("./models/task");
 
 const app = express();
 
@@ -16,7 +18,22 @@ app.post("/users", (req, res) => {
     .then(() => {
       res.send(user);
     })
-    .catch(() => {});
+    .catch(e => {
+      res.status(400).send(e);
+    });
+});
+
+app.post("/tasks", (req, res) => {
+  const task = new Task(req.body);
+
+  task
+    .save()
+    .then(() => {
+      res.send(task);
+    })
+    .catch(e => {
+      res.status(400).send(e);
+    });
 });
 
 app.listen(port, () => {
