@@ -8,7 +8,7 @@
     "test": "env-cmd ./src/config/.env.test jest --watch"
   },
   "jest": {
-    "testEnviroment": "node"
+    "testEnvironment": "node"
   },
   "license": "MIT",
   "dependencies": {
