@@ -1,23 +1,9 @@
 const request = require("supertest");
-const jwt = require("jsonwebtoken");
-const mongoose = require("mongoose");
 const app = require("../src/app");
 const User = require("../src/models/user");
+const { userOne, userOneId, setupDatabase } = require("./fixtures/db");
 
-const userOneId = new mongoose.Types.ObjectId();
-
-const userOne = {
-  _id: userOneId,
-  name: "Merel",
-  email: "merel88@gmail.com",
-  password: "hELLO29Daa",
-  tokens: [{ token: jwt.sign({ _id: userOneId }, process.env.JWT_SECRET) }]
-};
-
-beforeEach(async () => {
-  await User.deleteMany();
-  await new User(userOne).save();
-});
+beforeEach(setupDatabase);
 
 test("Should signup a new user", async () => {
   const response = await request(app)
@@ -42,7 +28,7 @@ test("Should signup a new user", async () => {
     token: user.tokens[0].token
   });
 
-  expect(user.password).not.toBe("mYpaLLOWord1");
+  expect(user.password).not.toEqual("mYpaLLOWord1");
 });
 
 test("Should not signup a new user with invalid email", async () => {
